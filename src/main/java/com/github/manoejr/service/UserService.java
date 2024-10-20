@@ -1,33 +1,38 @@
 package com.github.manoejr.service;
 
 import com.github.manoejr.model.User;
+import com.github.manoejr.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 @Service
 public class UserService {
 
-    private List<User> database = new ArrayList<>();
+    private final UserRepository repository;
+
+    public UserService(UserRepository repository) {
+        this.repository = repository;
+    }
 
     public void gravar(User user) {
-        database.add(user);
+        repository.save(user);
     }
 
     public void alterando(User user) {
-        int index = database.indexOf(user);
-        database.set(index, user);
+        repository.save(user);
     }
 
-    public User buscarPorUsername(String username) {
-        int index = database.indexOf(new User(username));
-        User selectUser = database.get(index);
-        return selectUser;
+    public User findByUsername(String username) {
+        return repository.findByUsername(username);
     }
 
     public List<User> listar() {
-        return database;
+        return repository.findAll();
+    }
+
+    public void deletar(Integer id) {
+        repository.deleteById(id);
     }
 }
